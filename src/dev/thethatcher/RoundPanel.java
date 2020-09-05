@@ -20,25 +20,26 @@ public class RoundPanel extends JPanel implements ActionListener {
 	JButton nextRound;
 	JButton newGame;
 	JLabel roundLabel;
-	int roundCounter = 1;
+	int roundCounter;
 	
 	RoundPanel(){
 		super();
+		roundCounter = 1;
 		nextRound = new JButton("Next Round");
 		nextRound.addActionListener(this);
 		newGame = new JButton("New Game");
 		roundLabel = new JLabel("Round " + roundCounter,JLabel.CENTER);
 		roundLabel.setFont(roundLabel.getFont().deriveFont(24f));
 		BoxLayout bl = new BoxLayout(this, BoxLayout.X_AXIS);
-		setLayout(bl);
-		add(Box.createHorizontalGlue());
-		add(newGame);
-		add(Box.createRigidArea(new Dimension(35,0)));
-		add(roundLabel);
-		add(Box.createRigidArea(new Dimension(35,0)));
-		add(nextRound);
-		add(Box.createHorizontalGlue());
-		setVisible(true);
+		this.setLayout(bl);
+		this.add(Box.createHorizontalGlue());
+		this.add(newGame);
+		this.add(Box.createRigidArea(new Dimension(35,0)));
+		this.add(roundLabel);
+		this.add(Box.createRigidArea(new Dimension(35,0)));
+		this.add(nextRound);
+		this.add(Box.createHorizontalGlue());
+		this.setVisible(true);
 	}
 	
 	private void nextRound() {
