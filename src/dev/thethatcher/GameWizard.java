@@ -39,7 +39,12 @@ public class GameWizard extends JPanel implements ActionListener {
 			cl.show(this, "Game Board");
 		} else if(e.getActionCommand() == "New Game") {
 			cl.show(this, "New Game");
-			// Clear points and reset round to 1
+			for(Player player : board.playerList) {
+				player.setPoints(0);
+				board.playerList.clear();
+				board.roundPanel.roundCounter = 1;
+				board.roundPanel.drawRoundLabel();
+			}
 			
 		}
 		

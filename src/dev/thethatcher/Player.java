@@ -3,6 +3,8 @@ package dev.thethatcher;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -43,6 +45,11 @@ public class Player extends JPanel implements ActionListener{
 		cashout.setEnabled(flag);
 	}
 	
+	public void setPoints(int points) {
+		player.score = points;
+		drawScore();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
@@ -58,8 +65,20 @@ public class Player extends JPanel implements ActionListener{
 				}
 			}
 			if(allOut) {
-				board.pointPanel.rollDice.setEnabled(false);
-				board.roundPanel.enableNextRoud();
+				if(board.roundPanel.roundCounter >= 20) {
+					String winnerName = "John";
+					int winnerScore = 0;
+					for(Player player : board.playerList) {
+						if(player.player.score > winnerScore) {
+							winnerName = player.player.getName();
+							winnerScore = player.player.score;
+						}
+					board.pointPanel.drawPointsLabel("Congratulations \n" + winnerName);
+					}
+				}else {
+					board.pointPanel.rollDice.setEnabled(false);
+					board.roundPanel.enableNextRoud();
+				}
 			}
 		}
 	}

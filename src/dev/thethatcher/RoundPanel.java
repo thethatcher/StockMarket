@@ -60,6 +60,12 @@ public class RoundPanel extends JPanel implements ActionListener {
 		nextRound.setEnabled(true);
 	}
 
+	public void drawRoundLabel() {
+		roundLabel.setText("Round " + roundCounter);
+		roundLabel.revalidate();
+		roundLabel.repaint();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();

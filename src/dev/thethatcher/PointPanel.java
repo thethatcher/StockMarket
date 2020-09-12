@@ -146,6 +146,17 @@ public class PointPanel extends JPanel implements ActionListener{
 			}
 			rollDice.setEnabled(false);
 			board.roundPanel.nextRound.setEnabled(true);
+			if(board.roundPanel.roundCounter >= 2) {
+				String winnerName = "John";
+				int winnerScore = 0;
+				for(Player player : board.playerList) {
+					if(player.player.score > winnerScore) {
+						winnerName = player.player.getName();
+						winnerScore = player.player.score;
+					}
+				board.pointPanel.drawPointsLabel("Congratulations \n" + winnerName);
+				}
+			}
 		} else if (num1 == num2) {
 			//doubles
 			board.pot = board.pot * 2;
