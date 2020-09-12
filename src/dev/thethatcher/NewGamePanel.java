@@ -14,11 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
 public class NewGamePanel extends JPanel implements ActionListener{
-	LinkedList<String> players = new LinkedList();
+	LinkedList<PlayerData> players;
+	Board board;
 	JPanel playerPanel;
 	JButton addPlayer, start;
-	NewGamePanel(){
+	NewGamePanel(Board board){
 		super();
+		this.board = board;
+		this.players = board.players;
 		this.setLayout(new BorderLayout());
 		addPlayer = new JButton("Add Player");
 		start = new JButton("Start Game");
@@ -44,7 +47,7 @@ public class NewGamePanel extends JPanel implements ActionListener{
 		playerPanel.repaint();
 	}
 	
-	public void removePlayer(String player) {
+	public void removePlayer(PlayerData player) {
 		players.remove(player);
 		drawPlayers();
 	}
@@ -55,7 +58,7 @@ public class NewGamePanel extends JPanel implements ActionListener{
 		String player;
 		if(source == addPlayer) {
 			player = JOptionPane.showInputDialog(null, "Enter Player Name", "Add Player", JOptionPane.QUESTION_MESSAGE);
-			players.add(player);
+			players.add(new PlayerData(player));
 			drawPlayers();
 		}
 	}

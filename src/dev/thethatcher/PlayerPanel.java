@@ -1,33 +1,43 @@
 package dev.thethatcher;
 
 import java.awt.Dimension;
+import java.util.LinkedList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class PlayerPanel extends JPanel {
-	PlayerPanel(){
+	JPanel playerListPanel;
+	Board board;
+	
+	PlayerPanel(Board board){
 		super();
-		this.add(createHeader());
-		
+		this.board = board;
+		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+		playerListPanel = new JPanel();
+		playerListPanel.setLayout(new BoxLayout(playerListPanel,BoxLayout.Y_AXIS));
+		this.add(playerListPanel);
 		this.setVisible(true);
 	}
 	
-	private JPanel createHeader() {
-		JPanel header = new JPanel();
-		BoxLayout bl = new BoxLayout(header,BoxLayout.X_AXIS);
-		header.setLayout(bl);
-		header.add(Box.createHorizontalGlue());
-		header.add(new JLabel("Player"));
-		header.add(Box.createHorizontalGlue());
-		header.add(new JLabel("Score"));
-		header.add(Box.createHorizontalGlue());
-		header.add(new JLabel("Cash Out"));
-		header.add(Box.createHorizontalGlue());
-		header.add(new BoxSeparator(SwingConstants.HORIZONTAL));
-		return header;
+	public void setPlayers() {
+		for(PlayerData player : board.players) {
+			board.playerList.add(new Player(board, player));
+		}
 	}
+
+	public void drawPlayers() {
+		playerListPanel.removeAll();
+		for(Player player : board.playerList) {
+			playerListPanel.add(player);
+			playerListPanel.add(new BoxSeparator(BoxSeparator.HORIZONTAL,150));
+		}
+		playerListPanel.revalidate();
+		playerListPanel.repaint();
+	}
+	
 }

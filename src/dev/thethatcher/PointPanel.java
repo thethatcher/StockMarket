@@ -24,11 +24,15 @@ public class PointPanel extends JPanel implements ActionListener{
 	private JLabel die1, die2;
 	ImageIcon[] diceIcons = new ImageIcon[6];
 	JLabel currentPot,pointsLabel;
+	Board board;
+	int rollCount = 1;
 	
-	PointPanel(){
+	PointPanel(Board board){
 		super();
+		this.board = board;
 		BoxLayout bl = new BoxLayout(this, BoxLayout.X_AXIS);
 		this.setLayout(bl);
+		rollDice.addActionListener(this);
 		this.add(Box.createHorizontalGlue());
 		this.add(createDicePane());
 		this.add(Box.createRigidArea(new Dimension(10,0)));
@@ -77,7 +81,6 @@ public class PointPanel extends JPanel implements ActionListener{
 		JPanel dicePanel = createDice();
 		dicePanel.setAlignmentX(CENTER_ALIGNMENT);
 		rollDice.setAlignmentX(CENTER_ALIGNMENT);
-		//dicePane.add(rollDice);
 		dicePane.add(rollDice);
 		dicePane.add(dicePanel);
 		dicePane.setVisible(true);
@@ -105,18 +108,87 @@ public class PointPanel extends JPanel implements ActionListener{
 	private int rollDie() {
 		return (int) Math.ceil((Math.random() * 6));
 	}
-
+	
+	private void drawDice(int d1, int d2) {
+		this.die1.setIcon(diceIcons[d1]);
+		die2.setIcon(diceIcons[d2]);
+		this.die1.revalidate();
+		this.die1.repaint();
+		die2.revalidate();
+		die2.repaint();
+	}
+	
+	private void drawPointsLabel() {
+		pointsLabel.revalidate();
+		pointsLabel.repaint();
+	}
+	
+	public void drawPointsLabel(String text) {
+		pointsLabel.setText(text);
+		drawPointsLabel();
+	}
+	
+	public void drawPotLabel() {
+		currentPot.setText(board.pot + "");
+		currentPot.revalidate();
+		currentPot.repaint();
+	}
+	
+	private void marketOpenDiceRoll(int num1, int num2) {
+		if(num1 + num2 == 7) {
+			//bust
+			board.pot = 0;
+			pointsLabel.setText("Busted!");
+			drawPotLabel();
+			drawPointsLabel();
+			for(Player player : board.playerList) {
+				player.enableCashout(false);
+			}
+			rollDice.setEnabled(false);
+			board.roundPanel.nextRound.setEnabled(true);
+		} else if (num1 == num2) {
+			//doubles
+			board.pot = board.pot * 2;
+			pointsLabel.setText("Doubles!");
+			drawPotLabel();
+			drawPointsLabel();
+		} else {
+			int points = ((num1 + num2) * 10);
+			board.pot += points;
+			drawPotLabel();
+			pointsLabel.setText(points + " points!");
+			drawPointsLabel();
+		}
+	}
+	
+	private void marketClosedRollDice(int num1, int num2) {
+		int sum = num1 + num2;
+			board.pot += (10*sum);
+			drawPotLabel();
+			pointsLabel.setText( (sum*10) + " points!!");
+			drawPointsLabel();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
 		if(source == rollDice) {
-			/*
-			 * animate the dice
-			 * determine point value of die roll
-			 * update the current points display
-			 * update the current pot
-			 * if busted, end round, enable next round button.
-			 */
+			int num1 = rollDie();
+			int num2 = rollDie();
+			
+			drawDice(num1 - 1,num2 -1);
+			if(rollCount <= 3) {
+				marketClosedRollDice(num1,num2);
+				rollCount++;
+				if(rollCount == 4) {
+					for(Player player : board.playerList) {
+						player.enableCashout(true);
+					}
+				}
+			} else {
+				marketOpenDiceRoll(num1,num2);	
+				rollCount++;
+			}
 		}
 	}
 }

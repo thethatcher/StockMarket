@@ -14,18 +14,19 @@ import javax.swing.SwingConstants;
 
 public class NewPlayer extends JPanel implements ActionListener {
 	NewGamePanel newGamePanel;
-	String playerName;
+	PlayerData playerData;
+	JButton deletePlayer;
 	
-	NewPlayer(NewGamePanel ngp,String name){
+	NewPlayer(NewGamePanel ngp,PlayerData player){
 		super();
 		newGamePanel = ngp;
-		playerName = name;
+		playerData = player;
 		BoxLayout bl = new BoxLayout(this,BoxLayout.X_AXIS);
 		setLayout(bl);
 		
-		JButton deletePlayer = new JButton("X");
+		deletePlayer = new JButton("X");
 		deletePlayer.addActionListener(this);
-		JLabel nameLabel = new JLabel(playerName,SwingConstants.RIGHT);
+		JLabel nameLabel = new JLabel(playerData.getName(),SwingConstants.RIGHT);
 		this.add(nameLabel);
 		this.add(Box.createRigidArea(new Dimension(3,0)));
 		this.add(deletePlayer);
@@ -35,8 +36,8 @@ public class NewPlayer extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
-		if(e.getActionCommand() == "X") {
-			newGamePanel.removePlayer(playerName);
+		if(source == deletePlayer) {
+			newGamePanel.removePlayer(playerData);
 		}
 		
 	}

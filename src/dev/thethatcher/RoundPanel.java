@@ -21,9 +21,11 @@ public class RoundPanel extends JPanel implements ActionListener {
 	JButton newGame;
 	JLabel roundLabel;
 	int roundCounter;
+	Board board;
 	
-	RoundPanel(){
+	RoundPanel(Board board){
 		super();
+		this.board = board;
 		roundCounter = 1;
 		nextRound = new JButton("Next Round");
 		nextRound.addActionListener(this);
@@ -45,7 +47,17 @@ public class RoundPanel extends JPanel implements ActionListener {
 	private void nextRound() {
 		roundCounter++;
 		roundLabel.setText("Round " + roundCounter);
+		nextRound.setEnabled(false);
+		board.pointPanel.rollDice.setEnabled(true);
+		board.pot = 0;
+		board.pointPanel.drawPotLabel();
+		board.pointPanel.rollCount = 1;
+		board.pointPanel.drawPointsLabel("Roll The Dice!");
 		repaint();
+	}
+	
+	public void enableNextRoud() {
+		nextRound.setEnabled(true);
 	}
 
 	@Override

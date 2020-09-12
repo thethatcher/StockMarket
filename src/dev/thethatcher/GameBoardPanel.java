@@ -17,11 +17,18 @@ public class GameBoardPanel extends JPanel {
 	JButton newGame;
 	RoundPanel roundPanel;
 	PointPanel pointPanel;
+	PlayerPanel playerPanel;
+	Board board;
 	
-	GameBoardPanel(){
+	GameBoardPanel(Board board){
+		this.board = board;
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		roundPanel = new RoundPanel();
-		pointPanel = new PointPanel();
+		roundPanel = new RoundPanel(board);
+		pointPanel = new PointPanel(board);
+		playerPanel = new PlayerPanel(board);
+		board.pointPanel = this.pointPanel;
+		board.roundPanel = this.roundPanel;
+		board.roundPanel.nextRound.setEnabled(false);
 		this.add(Box.createRigidArea(new Dimension(0,8)));
 		this.add(roundPanel);
 		this.add(Box.createRigidArea(new Dimension(0,8)));
@@ -31,9 +38,9 @@ public class GameBoardPanel extends JPanel {
 		this.add(Box.createRigidArea(new Dimension(0,8)));
 		this.add(new BoxSeparator(JSeparator.HORIZONTAL));
 		this.add(Box.createRigidArea(new Dimension(0,8)));
-		this.add(Box.createVerticalGlue());
-		this.add(new PlayerPanel());
 		
+		this.add(playerPanel);
+		this.add(Box.createVerticalGlue());
 		setVisible(true);
 	}
 }
